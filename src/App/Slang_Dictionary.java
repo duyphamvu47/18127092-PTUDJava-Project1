@@ -55,5 +55,22 @@ public class Slang_Dictionary {
         System.out.println("The value is: " + dict.get(slang)); 
     }
 
+    public void findSlang(String meaning){
+        List<Entry<String, ArrayList<String>>> found = this.dict
+                .entrySet()
+                .stream()
+                .filter(entry -> entry.getValue().toString().contains(meaning))
+                .collect(Collectors.toList());
+        
+        System.out.println("Searching for slang with definition: " + meaning); 
+        Iterator i = found.iterator();
+        ArrayList<String> res = new ArrayList<>();
+        while(i.hasNext()){
+            Object next = i.next();
+            String[] temp = next.toString().split("\\=");
+            res.add(temp[0]);
+        }
+        System.out.print(res);
+    }
 
 }
