@@ -23,11 +23,8 @@ public class fileHandler {
             br.close();
             bw.close();
             
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    public static void main(String[] args) {
-        inputFileHandler("slang.txt", "Preprocessed.txt");
     }
 }
