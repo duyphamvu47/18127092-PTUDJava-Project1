@@ -1,32 +1,28 @@
 package src.App;
+
 import java.util.*;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.io.*;
-import src.fileHandler.*;
 import java.nio.file.*;
 
 public class Slang_Dictionary {
-    HashMap<String, String> dict = null;
+    HashMap<String, ArrayList<String>> dict = null;
 
 
     public Slang_Dictionary(){
-        this.dict = new HashMap<String, String>();
-        this.readData();
+        this.dict = new HashMap<>();
+        this.readFile("slang.txt");
     }
 
 
     private void readData(){
-        String preprocessed_file = "Preprocessed.txt";
         System.out.println("Loading data");
         if(Files.exists(Paths.get("CurrentData.txt"))) { 
             readFile("CurrentData.txt");
         }
-        else if ((Files.exists(Paths.get(preprocessed_file)))){
-            System.out.println("Can't found CurrentData.txt");
-            readFile(preprocessed_file);
-        }
         else{
-            fileHandler.inputFileHandler("slang.txt", "Preprocessed.txt");
-            System.out.println("Can't found CurrentData.txt and Preprocess.txt");
+            System.out.println("Can't found CurrentData.txt");
             readFile("Proprocessed.txt");
         }
 
@@ -36,10 +32,16 @@ public class Slang_Dictionary {
     private void readFile(String fileName){
         try(BufferedReader br1 = new BufferedReader(new FileReader(new File(fileName)))) {
             System.out.println("Read data from " + fileName);
-            String line;
+            String line = br1.readLine();
             while((line = br1.readLine()) != null){
-                String[] temp = line.split("\\|");
-                dict.put(temp[0], temp[1]);
+                String[] preprocess = line.split("`");
+                String slang = preprocess[0];
+                String[] meaning_arr = preprocess[1].split("\\|");
+                for(int i = 0; i < meaning_arr.length; i++){
+                    meaning_arr[i] = meaning_arr[i].strip();
+                }
+                ArrayList<String> meaning = new ArrayList<String>(Arrays.asList(meaning_arr));
+                dict.put(slang, meaning);
             }
             br1.close();
             System.out.println("Load data complete!!!");
@@ -48,6 +50,10 @@ public class Slang_Dictionary {
         }
     }
 
+    public void findMeaing(String slang){
+        System.out.println("Searching for " + slang); 
+        System.out.println("The value is: " + dict.get(slang)); 
+    }
 
 
 }
