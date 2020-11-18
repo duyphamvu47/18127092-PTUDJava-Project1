@@ -12,20 +12,14 @@ public class Slang_Dictionary {
 
     public Slang_Dictionary(){
         this.dict = new HashMap<>();
-        this.readFile("slang.txt");
-    }
-
-
-    private void readData(){
-        System.out.println("Loading data");
-        if(Files.exists(Paths.get("CurrentData.txt"))) { 
-            readFile("CurrentData.txt");
+        if(Files.exists(Paths.get("CurrentData.txt"))){
+            this.readFile("CurrentData.txt");
         }
         else{
-            System.out.println("Can't found CurrentData.txt");
-            readFile("Proprocessed.txt");
+            this.readFile("slang.txt");
         }
-
+            
+        
     }
 
 
@@ -52,7 +46,9 @@ public class Slang_Dictionary {
 
     public void findMeaing(String slang){
         System.out.println("Searching for " + slang); 
-        System.out.println("The value is: " + dict.get(slang)); 
+        ArrayList<String> res = dict.get(slang);
+        System.out.println("The value is: " + res); 
+        updateHistory(slang, res);
     }
 
     public void findSlang(String meaning){
@@ -70,7 +66,46 @@ public class Slang_Dictionary {
             String[] temp = next.toString().split("\\=");
             res.add(temp[0]);
         }
+        updateHistory(meaning, res);
         System.out.print(res);
+    }
+
+
+    private void updateHistory(String keyword, ArrayList<String> search_result){
+        String line = keyword;
+        if (search_result.size() > 0){
+            line += ": ";
+            line += search_result.get(0);
+            for(int i = 1; i < search_result.size(); i++){
+                line = line + ", " + search_result.get(i);
+            }
+            line += "\n";
+        }
+        try(FileWriter fw = new FileWriter("History.txt", true)) {
+            fw.write(line);
+            fw.close();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void getSearchHistory(){
+        if(Files.exists(Paths.get("History.txt"))){
+            try(BufferedReader bw = new BufferedReader(new FileReader(new File("History.txt")))) {
+                String line;
+                while((line = bw.readLine()) != null){
+                    System.out.println(line);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            System.out.println("Can't find History.txt");
+        }
     }
 
 }
