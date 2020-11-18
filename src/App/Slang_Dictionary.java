@@ -8,24 +8,30 @@ import java.nio.file.*;
 
 public class Slang_Dictionary {
     HashMap<String, ArrayList<String>> dict = null;
-
+    private static final String CURRENTDATA = "CurrentData.txt";
 
     public Slang_Dictionary(){
         this.dict = new HashMap<>();
-        if(Files.exists(Paths.get("CurrentData.txt"))){
-            this.readFile("CurrentData.txt");
+        this.readData();
+    }
+
+
+    private void readData(){
+        System.out.println("Loading data");
+        if(Files.exists(Paths.get(CURRENTDATA))) { 
+            readFile(CURRENTDATA);
         }
         else{
-            this.readFile("slang.txt");
+            System.out.println("Can't found CurrentData.txt");
+            readFile("Proprocessed.txt");
         }
-            
-        
+
     }
 
 
     private void readFile(String fileName){
         try(BufferedReader br1 = new BufferedReader(new FileReader(new File(fileName)))) {
-            System.out.println("Read data from " + fileName);
+            System.out.println("Reading data from " + fileName);
             String line = br1.readLine();
             while((line = br1.readLine()) != null){
                 String[] preprocess = line.split("`");
@@ -44,11 +50,36 @@ public class Slang_Dictionary {
         }
     }
 
+
+
+    private void writeFile(){
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(new File(CURRENTDATA))))  {
+            System.out.println("Writing data to CurrentData.txt");
+            String line = "Slang dictionary \n";
+            bw.write(line);
+            String[] key = dict.keySet().toArray(new String[dict.size()]);
+            for (int i = 0; i < key.length; i++){
+                line = key[i] + "`";
+                ArrayList<String> definition = dict.get(key[i]);
+                line += definition.get(0);
+                if(definition.size() > 1){
+                    for(int j = 1; j < definition.size(); j++){
+                        line += "| " + definition.get(j);
+                    }
+                }
+                line += "\n";
+                bw.write(line);
+            }
+            bw.close();
+        } catch (Exception e) {
+            //TODO: handle exception
+        }
+    }
+
+
     public void findMeaing(String slang){
         System.out.println("Searching for " + slang); 
-        ArrayList<String> res = dict.get(slang);
-        System.out.println("The value is: " + res); 
-        updateHistory(slang, res);
+        System.out.println("The value is: " + dict.get(slang)); 
     }
 
     public void findSlang(String meaning){
@@ -66,46 +97,25 @@ public class Slang_Dictionary {
             String[] temp = next.toString().split("\\=");
             res.add(temp[0]);
         }
-        updateHistory(meaning, res);
         System.out.print(res);
     }
 
 
-    private void updateHistory(String keyword, ArrayList<String> search_result){
-        String line = keyword;
-        if (search_result.size() > 0){
-            line += ": ";
-            line += search_result.get(0);
-            for(int i = 1; i < search_result.size(); i++){
-                line = line + ", " + search_result.get(i);
-            }
+    public void addSlang(String slang, String definition, String overwrite){
+
+        if ((overwrite.equals("Yes") && dict.containsKey(slang)) || !dict.containsKey(slang)){
+            ArrayList<String> value = new ArrayList<>();
+            value.add(definition);
+            dict.put(slang, value);
         }
-        try(FileWriter fw = new FileWriter("History.txt", true)) {
-            line += "\n";
-            fw.write(line);
-            fw.close();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
+        else if(overwrite.equals("No") && dict.containsKey(slang)){
+            ArrayList<String> value = dict.get(slang);
+            value.add(definition);
+            dict.put(slang, value);
         }
-    }
+        this.writeFile();
 
 
-
-    public void getSearchHistory(){
-        if(Files.exists(Paths.get("History.txt"))){
-            try(BufferedReader bw = new BufferedReader(new FileReader(new File("History.txt")))) {
-                String line;
-                while((line = bw.readLine()) != null){
-                    System.out.println(line);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        else{
-            System.out.println("Can't find History.txt");
-        }
     }
 
 }
