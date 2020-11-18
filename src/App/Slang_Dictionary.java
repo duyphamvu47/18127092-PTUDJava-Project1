@@ -79,9 +79,9 @@ public class Slang_Dictionary {
             for(int i = 1; i < search_result.size(); i++){
                 line = line + ", " + search_result.get(i);
             }
-            line += "\n";
         }
         try(FileWriter fw = new FileWriter("History.txt", true)) {
+            line += "\n";
             fw.write(line);
             fw.close();
             
