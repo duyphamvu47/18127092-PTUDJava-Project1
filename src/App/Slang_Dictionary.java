@@ -9,6 +9,7 @@ import java.nio.file.*;
 public class Slang_Dictionary {
     HashMap<String, ArrayList<String>> dict = null;
     private static final String CURRENTDATA = "CurrentData.txt";
+    private static final String HISTORY = "History.txt";
 
     public Slang_Dictionary(){
         this.dict = new HashMap<>();
@@ -23,7 +24,7 @@ public class Slang_Dictionary {
         }
         else{
             System.out.println("Can't found CurrentData.txt");
-            readFile("Proprocessed.txt");
+            readFile("slang.txt");
         }
 
     }
@@ -79,7 +80,16 @@ public class Slang_Dictionary {
 
     public void findMeaing(String slang){
         System.out.println("Searching for " + slang); 
-        System.out.println("The value is: " + dict.get(slang)); 
+
+        if(dict.containsKey(slang)){
+            ArrayList<String> definition = dict.get(slang);
+            System.out.println("The value is: " + definition); 
+            updateHistory(slang, definition);
+        }
+        else{
+            System.out.println("Can't found " + slang); 
+        }
+
     }
 
     public void findSlang(String meaning){
@@ -97,7 +107,8 @@ public class Slang_Dictionary {
             String[] temp = next.toString().split("\\=");
             res.add(temp[0]);
         }
-        System.out.print(res);
+        updateHistory(meaning, res);
+        System.out.print(res + "\n");
     }
 
 
@@ -116,6 +127,97 @@ public class Slang_Dictionary {
         this.writeFile();
 
 
+    }
+
+
+    public void editSlang(String slang, String definition, Scanner sc){
+        String option = "";
+        if (dict.containsKey(slang)){
+
+
+
+            while(!option.equals("Yes") && !option.equals("No")){
+                System.out.print("Overwrite slang? Yes/No: ");
+                option = sc.nextLine();
+            }
+            
+            addSlang(slang, definition, option);
+        }
+        else{
+            System.out.println("Cant found slang " + slang);
+            while(!option.equals("Yes") && !option.equals("No")){
+                System.out.print("Create a new slang word? Yes/No: ");
+                option = sc.nextLine();
+            }
+            if (option.equals("Yes")){
+                addSlang(slang, definition, "");
+            }
+        }
+    }
+
+
+    private void updateHistory(String keyword, ArrayList<String> search_result){
+        String line = keyword;
+        if (!search_result.isEmpty()){
+            line += ": ";
+            line += search_result.get(0);
+            for(int i = 1; i < search_result.size(); i++){
+                line = line + ", " + search_result.get(i);
+            }
+        }
+        try(FileWriter fw = new FileWriter(HISTORY, true)) {
+            line += "\n";
+            fw.write(line);
+            fw.close();
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    public void getSearchHistory(){
+        if(Files.exists(Paths.get(HISTORY))){
+            try(BufferedReader bw = new BufferedReader(new FileReader(new File(HISTORY)))) {
+                String line;
+                while((line = bw.readLine()) != null){
+                    System.out.println(line);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            System.out.println("Can't find History.txt");
+        }
+    }
+
+
+
+    public void removeSlang(String slang, Scanner sc){
+        if(dict.containsKey(slang)){
+            String option = "";
+            System.out.println("Slang word found");
+            while(!option.equals("Yes") && !option.equals("No")){
+                System.out.print("Your sure want to delete this slang word? Yes/No: ");
+                option = sc.nextLine();
+            }
+            if (option.equals("Yes")){
+                System.out.println("Slang word with key:" + slang + " , has been removed");
+                dict.remove(slang);
+                this.writeFile();
+            }
+        }
+    }
+
+
+    public void resetData(){
+        System.out.println("Reseting");
+        dict.clear();
+        this.readFile("slang.txt");
+        this.writeFile();
+        System.out.println("Reset completed");
     }
 
 }
