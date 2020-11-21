@@ -4,15 +4,19 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.file.*;
 
 public class Slang_Dictionary {
     HashMap<String, ArrayList<String>> dict = null;
+    Random random = null;
+
     private static final String CURRENTDATA = "CurrentData.txt";
     private static final String HISTORY = "History.txt";
 
     public Slang_Dictionary(){
         this.dict = new HashMap<>();
+        random = new Random();
         this.readData();
     }
 
@@ -219,5 +223,25 @@ public class Slang_Dictionary {
         this.writeFile();
         System.out.println("Reset completed");
     }
+
+
+    private String randomKey(){
+        List<String> keySet = new ArrayList<String>(dict.keySet());
+        return keySet.get(random.nextInt(keySet.size()));
+    }
+
+
+    public void randomSlang(){
+        String key = randomKey();
+        ArrayList<String> value = dict.get(key);
+        String line = key;
+        line += " mean ";
+        line += value.get(0);
+        for(int i = 1; i < value.size(); i++){
+            line = line + ", " + value.get(i);
+        }
+        System.out.println("The random slang word: " + line);
+    }
+
 
 }

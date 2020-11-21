@@ -1,6 +1,5 @@
 package src;
 import java.util.*;
-import src.fileHandler.fileHandler;
 import src.App.*;
 
 public class Main {
@@ -82,6 +81,10 @@ public class Main {
                         if(remove.equals("Yes")){
                             dict.resetData();
                         }
+                        break;
+                    
+                    case 8:
+                        dict.randomSlang();
                         break;
 
                     default:
