@@ -87,6 +87,14 @@ public class Main {
                         dict.randomSlang();
                         break;
 
+                    case 9:
+                        dict.quiz_Slang(sc);
+                        break;
+
+                    case 10:
+                        dict.quiz_Definition(sc);
+                        break;
+
                     default:
                         System.out.println("Wrong input");
                         break;

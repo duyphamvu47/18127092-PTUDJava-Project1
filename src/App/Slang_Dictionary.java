@@ -244,4 +244,101 @@ public class Slang_Dictionary {
     }
 
 
+
+    private String randomDefinition(String slang){
+        ArrayList<String> def =  dict.get(slang);
+        return def.get(random.nextInt(def.size()));
+    }
+
+
+    public void quiz_Slang(Scanner sc){
+        String[] def = new String[4];
+        String slang = this.randomKey();
+        int ans = random.nextInt(4);
+
+        def[ans] = this.randomDefinition(slang);
+
+        for(int i = 0; i < 4; i++){
+            if(i != ans){
+                def[i] = this.randomDefinition(this.randomKey());
+            }
+        }
+
+        System.out.println("Which one of the below answer is the definition of \"" + slang + "\"?");
+        System.out.println("A. " + def[0]);
+        System.out.println("B. " + def[1]);
+        System.out.println("C. " + def[2]);
+        System.out.println("D. " + def[3]);
+        System.out.print("Your choice: ");
+
+        String temp = sc.nextLine();
+        int user_choice = 5;
+        if(temp.equals("A")){
+            user_choice = 0;
+        }
+        else if(temp.equals("B")){
+            user_choice = 1;
+        }
+        else if(temp.equals("C")){
+            user_choice = 2;
+        }
+        else if(temp.equals("D")){
+            user_choice = 3;
+        }
+
+        if(user_choice == ans){
+            System.out.println("CORRECT!");
+        }
+        else{
+            System.out.println("INCORRECT!. The answer is: \"" + def[ans] + "\"");
+        }
+    }
+
+
+    public void quiz_Definition(Scanner sc){
+        String temp = this.randomKey();
+        String def = this.randomDefinition(temp);
+        String[] slang = new String[4];
+        int ans = random.nextInt(4);
+
+        slang[ans] = temp;
+
+        for(int i = 0; i < 4; i++){
+            if(i != ans){
+                slang[i] = this.randomKey();
+            }
+        }
+
+        System.out.println("Which one of the below answer is the slang word for \"" + def + "\"?");
+        System.out.println("A. " + slang[0]);
+        System.out.println("B. " + slang[1]);
+        System.out.println("C. " + slang[2]);
+        System.out.println("D. " + slang[3]);
+        System.out.print("Your choice: ");
+
+        temp = sc.nextLine();
+        int user_choice = 5;
+        if(temp.equals("A")){
+            user_choice = 0;
+        }
+        else if(temp.equals("B")){
+            user_choice = 1;
+        }
+        else if(temp.equals("C")){
+            user_choice = 2;
+        }
+        else if(temp.equals("D")){
+            user_choice = 3;
+        }
+
+        if(user_choice == ans){
+            System.out.println("CORRECT!");
+        }
+        else{
+            System.out.println("INCORRECT!. The answer is: \"" + slang[ans] + "\"");
+        }
+    }
+
+
+
 }
