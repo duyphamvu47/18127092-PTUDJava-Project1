@@ -134,27 +134,48 @@ public class Slang_Dictionary {
     }
 
 
-    public void editSlang(String slang, String definition, Scanner sc){
-        String option = "";
+    public void editSlang(String slang, Scanner sc){
         if (dict.containsKey(slang)){
+            System.out.println("Slang word found");
 
+            System.out.println("- 1.Edit slang");
+            System.out.println("- 2.Edit definition");
+            System.out.print("Your choice: ");
 
-
-            while(!option.equals("Yes") && !option.equals("No")){
-                System.out.print("Overwrite slang? Yes/No: ");
-                option = sc.nextLine();
+            int user_choice = 3;
+            try {
+                user_choice = Integer.parseInt(sc.nextLine());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
             }
-            
-            addSlang(slang, definition, option);
+
+            if (user_choice == 1){
+                System.out.println("Enter new slang: ");
+                String new_slang = sc.nextLine();
+                ArrayList<String> def = dict.get(slang);
+                dict.remove(slang);
+                dict.put(new_slang, def);
+                this.writeFile();
+            }
+
+            else if(user_choice == 2){
+                System.out.print("Enter new definition: ");
+                String new_def = sc.nextLine();
+                this.addSlang(slang, new_def, "Yes");
+            }
         }
         else{
-            System.out.println("Cant found slang " + slang);
-            while(!option.equals("Yes") && !option.equals("No")){
-                System.out.print("Create a new slang word? Yes/No: ");
-                option = sc.nextLine();
+            String userString = "";
+            while(!userString.equals("Yes") && !userString.equals("No")){
+                System.out.println("Can't found slang: \"" + slang + "\"");
+                System.out.print("Add a new slang word? Yes/No: ");
+                userString = sc.nextLine();
             }
-            if (option.equals("Yes")){
-                addSlang(slang, definition, "");
+
+            if(userString.equals("Yes")){
+                System.out.print("New definition: ");
+                String definition = sc.nextLine();
+                this.addSlang(slang, definition, "");
             }
         }
     }

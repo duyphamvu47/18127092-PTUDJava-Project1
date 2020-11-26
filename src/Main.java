@@ -27,14 +27,12 @@ public class Main {
                 }
                 switch(option){
                     case 1:
-                        System.out.print("Enter slang: ");
-                        slang = sc.nextLine();
+                        slang = readSlang(sc);
                         dict.findMeaing(slang);
                         break;
 
                     case 2:
-                        System.out.print("Enter definition: ");
-                        definition = sc.nextLine();
+                        definition = readDefinition(sc);
                         dict.findSlang(definition);
                         break;
 
@@ -43,10 +41,8 @@ public class Main {
                         break;
 
                     case 4:
-                        System.out.print("Enter slang: ");
-                        slang = sc.nextLine();
-                        System.out.print("Enter definition: ");
-                        definition = sc.nextLine();
+                        slang = readSlang(sc);
+                        definition = readDefinition(sc);
                         String overwrite = "";
 
                         while(!overwrite.equals("Yes") && !overwrite.equals("No")){
@@ -57,16 +53,12 @@ public class Main {
                         break;
 
                     case 5:
-                        System.out.print("Enter slang: ");
-                        slang = sc.nextLine();
-                        System.out.print("Enter definition: ");
-                        definition = sc.nextLine();
-                        dict.editSlang(slang, definition, sc);
+                        slang = readSlang(sc);
+                        dict.editSlang(slang, sc);
                         break;
                     
                     case 6:
-                        System.out.print("Enter slang: ");
-                        slang = sc.nextLine();
+                        slang = readSlang(sc);
                         dict.removeSlang(slang, sc);
                         break;
                     
@@ -117,5 +109,24 @@ public class Main {
         System.out.println("- 9.Quiz about slang definition: ");
         System.out.println("- 10.Quiz about slang word: ");
         System.out.print("Exercise to be executed (to Exit don't type number): ");
+    }
+
+    public static void clearScreen() {  
+        System.out.print("\033[H\033[2J");  
+        System.out.flush();  
+    }
+    
+    public static String readSlang(Scanner sc){
+        String slang = "";
+        System.out.print("Enter slang: ");
+        slang = sc.nextLine();
+        return slang;
+    }
+
+    public static String readDefinition(Scanner sc){
+        String def = "";
+        System.out.print("Enter definition: ");
+        def = sc.nextLine();
+        return def;
     }
 }
