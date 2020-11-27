@@ -22,6 +22,7 @@ public class Main {
             {
                 try {
                     option = Integer.parseInt(sc.nextLine());
+                    System.out.println("\t----------------------------------------");
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
@@ -90,24 +91,24 @@ public class Main {
                     default:
                         System.out.println("Wrong input");
                         break;
-
                 }
+                System.out.println("\t----------------------------------------");
             }
         }while(true);
         sc.close();
     }
 
     public static void printMenu(){
-        System.out.println("- 1.Find definition: ");
-        System.out.println("- 2.Find slang: ");
-        System.out.println("- 3.Show search history: ");
-        System.out.println("- 4.Add a new slang word: ");
-        System.out.println("- 5.Edit a slang word: ");
-        System.out.println("- 6.Delete a slang word: ");
-        System.out.println("- 7.Reset data: ");
+        System.out.println("- 1.Find definition ");
+        System.out.println("- 2.Find slang ");
+        System.out.println("- 3.Show search history ");
+        System.out.println("- 4.Add a new slang word ");
+        System.out.println("- 5.Edit a slang word ");
+        System.out.println("- 6.Delete a slang word ");
+        System.out.println("- 7.Reset data ");
         System.out.println("- 8.Random a slang word: ");
-        System.out.println("- 9.Quiz about slang definition: ");
-        System.out.println("- 10.Quiz about slang word: ");
+        System.out.println("- 9.Quiz about slang definition ");
+        System.out.println("- 10.Quiz about slang word ");
         System.out.print("Exercise to be executed (to Exit don't type number): ");
     }
 

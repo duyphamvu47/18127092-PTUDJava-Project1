@@ -82,12 +82,23 @@ public class Slang_Dictionary {
     }
 
 
+    private String toString(ArrayList<String> a){
+        StringBuilder sb = new StringBuilder();
+        for (String s : a)
+        {
+            sb.append(s);
+            sb.append(", ");
+        }
+        return sb.toString();
+    }
+
+
     public void findMeaing(String slang){
         System.out.println("Searching for " + slang); 
 
         if(dict.containsKey(slang)){
             ArrayList<String> definition = dict.get(slang);
-            System.out.println("The value is: " + definition); 
+            System.out.println("The value is: " + toString(definition)); 
             updateHistory(slang, definition);
         }
         else{
@@ -104,6 +115,11 @@ public class Slang_Dictionary {
                 .collect(Collectors.toList());
         
         System.out.println("Searching for slang with definition: " + meaning); 
+        if(found.isEmpty()){
+            System.out.println("Can't found slang with definition: " + meaning); 
+            return;
+        }
+
         Iterator i = found.iterator();
         ArrayList<String> res = new ArrayList<>();
         while(i.hasNext()){
@@ -112,7 +128,7 @@ public class Slang_Dictionary {
             res.add(temp[0]);
         }
         updateHistory(meaning, res);
-        System.out.print(res + "\n");
+        System.out.println("The slang(s) with the definition \"" + meaning + "\": " + toString(res));
     }
 
 
@@ -206,6 +222,7 @@ public class Slang_Dictionary {
         if(Files.exists(Paths.get(HISTORY))){
             try(BufferedReader bw = new BufferedReader(new FileReader(new File(HISTORY)))) {
                 String line;
+                System.out.println("Search history (keyword: result):");
                 while((line = bw.readLine()) != null){
                     System.out.println(line);
                 }
@@ -285,15 +302,26 @@ public class Slang_Dictionary {
             }
         }
 
-        System.out.println("Which one of the below answer is the definition of \"" + slang + "\"?");
-        System.out.println("A. " + def[0]);
-        System.out.println("B. " + def[1]);
-        System.out.println("C. " + def[2]);
-        System.out.println("D. " + def[3]);
-        System.out.print("Your choice: ");
+        List<String> tempStrings = new ArrayList<String>(4);
+        tempStrings.add("A");
+        tempStrings.add("B");
+        tempStrings.add("C");
+        tempStrings.add("D");
 
-        String temp = sc.nextLine();
+        System.out.println("Which one of the below answer is the definition of \"" + slang + "\"?");
+        for(int i = 0; i < 4; i++){
+            System.out.println(tempStrings.get(i) + ". " + def[i]);
+        }
+
+
+        String temp = "";
+        while(!tempStrings.contains(temp)){
+            System.out.print("Your choice: ");
+            temp = sc.nextLine();
+        }
+
         int user_choice = 5;
+
         if(temp.equals("A")){
             user_choice = 0;
         }
@@ -311,7 +339,7 @@ public class Slang_Dictionary {
             System.out.println("CORRECT!");
         }
         else{
-            System.out.println("INCORRECT!. The answer is: \"" + def[ans] + "\"");
+            System.out.println("INCORRECT!. The answer is: \"" + tempStrings.get(ans) + ". " +  def[ans] + "\"");
         }
     }
 
@@ -330,15 +358,26 @@ public class Slang_Dictionary {
             }
         }
 
-        System.out.println("Which one of the below answer is the slang word for \"" + def + "\"?");
-        System.out.println("A. " + slang[0]);
-        System.out.println("B. " + slang[1]);
-        System.out.println("C. " + slang[2]);
-        System.out.println("D. " + slang[3]);
-        System.out.print("Your choice: ");
+        List<String> tempStrings = new ArrayList<String>(4);
+        tempStrings.add("A");
+        tempStrings.add("B");
+        tempStrings.add("C");
+        tempStrings.add("D");
 
-        temp = sc.nextLine();
+        System.out.println("Which one of the below slang have the definition \"" + def + "\"?");
+        for(int i = 0; i < 4; i++){
+            System.out.println(tempStrings.get(i) + ". " + slang[i]);
+        }
+
+
+        temp = "";
+        while(!tempStrings.contains(temp)){
+            System.out.print("Your choice: ");
+            temp = sc.nextLine();
+        }
+
         int user_choice = 5;
+
         if(temp.equals("A")){
             user_choice = 0;
         }
@@ -356,7 +395,7 @@ public class Slang_Dictionary {
             System.out.println("CORRECT!");
         }
         else{
-            System.out.println("INCORRECT!. The answer is: \"" + slang[ans] + "\"");
+            System.out.println("INCORRECT!. The answer is: \"" + tempStrings.get(ans) + ". " + slang[ans] + "\"");
         }
     }
 
