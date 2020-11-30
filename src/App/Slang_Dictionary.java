@@ -8,7 +8,9 @@ import java.lang.reflect.Array;
 import java.nio.file.*;
 
 public class Slang_Dictionary {
-    HashMap<String, ArrayList<String>> dict = null;
+    //Data structure
+    HashMap<String, ArrayList<String>> dict = null; //String: Slang, ArrayList: definition
+    //Random for quiz
     Random random = null;
 
     private static final String CURRENTDATA = "CurrentData.txt";
@@ -83,11 +85,13 @@ public class Slang_Dictionary {
 
 
     private String toString(ArrayList<String> a){
+
         StringBuilder sb = new StringBuilder();
-        for (String s : a)
-        {
-            sb.append(s);
-            sb.append(", ");
+        for (int i = 0; i < a.size(); i++){
+            sb.append(a.get(i));
+            if (i != 0){
+                sb.append(", ");
+            }
         }
         return sb.toString();
     }
@@ -108,13 +112,14 @@ public class Slang_Dictionary {
     }
 
     public void findSlang(String meaning){
+        System.out.println("Searching for slang with definition: " + meaning);
+        // Tham khao tu stackoverflow
         List<Entry<String, ArrayList<String>>> found = this.dict
                 .entrySet()
                 .stream()
                 .filter(entry -> entry.getValue().toString().contains(meaning))
                 .collect(Collectors.toList());
-        
-        System.out.println("Searching for slang with definition: " + meaning); 
+
         if(found.isEmpty()){
             System.out.println("Can't found slang with definition: " + meaning); 
             return;
@@ -133,6 +138,8 @@ public class Slang_Dictionary {
 
 
     public void addSlang(String slang, String definition, String overwrite){
+
+
 
         if ((overwrite.equals("Yes") && dict.containsKey(slang)) || !dict.containsKey(slang)){
             ArrayList<String> value = new ArrayList<>();
@@ -166,7 +173,7 @@ public class Slang_Dictionary {
             }
 
             if (user_choice == 1){
-                System.out.println("Enter new slang: ");
+                System.out.print("Enter new slang: ");
                 String new_slang = sc.nextLine();
                 ArrayList<String> def = dict.get(slang);
                 dict.remove(slang);
@@ -273,11 +280,12 @@ public class Slang_Dictionary {
         String key = randomKey();
         ArrayList<String> value = dict.get(key);
         String line = key;
-        line += " mean ";
+        line += " - \"";
         line += value.get(0);
         for(int i = 1; i < value.size(); i++){
             line = line + ", " + value.get(i);
         }
+        line += "\"";
         System.out.println("The random slang word: " + line);
     }
 
