@@ -17,9 +17,16 @@ public class Slang_Dictionary {
     private static final String HISTORY = "History.txt";
 
     public Slang_Dictionary(){
-        this.dict = new HashMap<>();
-        random = new Random();
-        this.readData();
+        if(Files.exists(Paths.get(CURRENTDATA)) || Files.exists(Paths.get("slang.txt"))){
+            this.dict = new HashMap<>();
+            random = new Random();
+            this.readData();
+        }
+        else{
+            System.out.println("Can't find require file");
+            System.exit(0);
+        }
+
     }
 
 
